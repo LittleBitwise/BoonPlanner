@@ -8,6 +8,7 @@ SOUL_THRESHOLDS = (
     45500, 49200,
 )
 ABILITY_UNLOCK_LEVELS = {0, 2, 4, 7}
+ABILITY_TIER_COSTS = (1, 2, 5)
 
 
 def build_levels():
@@ -29,7 +30,7 @@ def create_app():
 
     @app.get("/")
     def index():
-        return render_template("index.html", levels=levels)
+        return render_template("index.html", levels=levels, ability_tier_costs=ABILITY_TIER_COSTS)
 
     @app.get("/api/levels")
     def get_levels():

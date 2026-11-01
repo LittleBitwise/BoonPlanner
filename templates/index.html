@@ -36,6 +36,8 @@
         </div>
         <div class="summary-bottom">
           <span id="rewardValue">LEVEL 0 · ABILITY UNLOCK</span>
+          <span class="unspent-display">UNSPENT AP <b id="unspentValue">0</b></span>
+          <span class="unlock-bank">UNSPENT UNLOCKS <b id="unspentUnlocks">0 BASIC · 0 ULT</b></span>
           <span id="nextValue">START PICK</span>
         </div>
       </div>
@@ -47,7 +49,8 @@
           <button type="button" class="reset-button" id="resetButton" title="Clear the ability order">RESET</button>
         </div>
       </div>
-      <p class="choice-prompt" id="choicePrompt">Choose one of the first three abilities to unlock at level 0.</p>
+      <p class="choice-prompt" id="choicePrompt">Gain the starting level to bank an ability unlock. You can assign it later.</p>
+      <button type="button" class="gain-level-button" id="gainLevelButton">GAIN LEVEL <span>BANK +1 BASIC UNLOCK</span></button>
 
       <div class="ability-grid" id="abilityGrid" role="group" aria-label="Choose an ability to unlock or upgrade">
         <button type="button" class="ability-card" data-ability="ability-1">
@@ -66,7 +69,7 @@
 
       <section class="build-section" aria-labelledby="buildTitle">
         <div class="section-heading"><div><span class="label">YOUR SEQUENCE</span><h2 id="buildTitle">BUILD ORDER</h2></div><span class="order-count" id="orderCount">0 PICKS</span></div>
-        <p class="empty-order" id="emptyOrder">Your first pick unlocks a basic ability at 600 souls.</p>
+        <p class="empty-order" id="emptyOrder">Level gains, banked rewards, and ability upgrades will appear here in order.</p>
         <ol class="build-order" id="buildOrder" aria-live="polite"></ol>
       </section>
 
@@ -91,5 +94,6 @@
     </section>
   </main>
   <script id="boon-levels" type="application/json">{{ levels|tojson }}</script>
+  <script id="ability-tier-costs" type="application/json">{{ ability_tier_costs|tojson }}</script>
 </body>
 </html>

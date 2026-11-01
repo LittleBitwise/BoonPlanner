@@ -1,14 +1,18 @@
 const levels = JSON.parse(document.querySelector("#boon-levels").textContent);
+const abilityTierCosts = JSON.parse(document.querySelector("#ability-tier-costs").textContent);
 const abilityCards = [...document.querySelectorAll(".ability-card")];
 const milestoneCards = [...document.querySelectorAll(".level-card")];
 const soulsValue = document.querySelector("#soulsValue");
 const levelValue = document.querySelector("#levelValue");
 const rewardValue = document.querySelector("#rewardValue");
 const nextValue = document.querySelector("#nextValue");
+const unspentValue = document.querySelector("#unspentValue");
+const unspentUnlocks = document.querySelector("#unspentUnlocks");
 const progressFill = document.querySelector("#progressFill");
 const progressTrack = document.querySelector(".progress-track");
 const choiceHeading = document.querySelector("#choiceHeading");
 const choicePrompt = document.querySelector("#choicePrompt");
+const gainLevelButton = document.querySelector("#gainLevelButton");
 const buildOrder = document.querySelector("#buildOrder");
 const orderCount = document.querySelector("#orderCount");
 const emptyOrder = document.querySelector("#emptyOrder");
@@ -18,82 +22,100 @@ const abilities = new Map(abilityCards.map((card) => [card.dataset.ability, {
   name: card.querySelector("strong").textContent,
   ultimate: card.dataset.ability === "ultimate",
   unlocked: false,
-  points: 0,
+  tier: 0,
 }]));
-let picks = [];
+let actions = [];
 let currentLevel = -1;
+let unspentAbilityPoints = 0;
+let pendingBasicUnlocks = 0;
+let pendingUltimateUnlocks = 0;
 let order = [];
 
 function formatSouls(value) {
   return Number(value).toLocaleString("en-US");
 }
 
-function tierFor(points) {
-  if (points >= 8) return 3;
-  if (points >= 3) return 2;
-  if (points >= 1) return 1;
-  return 0;
-}
-
-function nextTier(points) {
-  if (points < 1) return { tier: 1, remaining: 1 };
-  if (points < 3) return { tier: 2, remaining: 3 - points };
-  if (points < 8) return { tier: 3, remaining: 8 - points };
-  return null;
-}
-
 function targetLevel() {
   return levels[currentLevel + 1] ?? null;
 }
 
-function canChoose(ability, target) {
-  if (!target) return false;
-  if (target.reward === "Ability unlock") {
-    if (ability.unlocked) return false;
-    return target.level === 7 ? ability.ultimate : !ability.ultimate;
-  }
-  return ability.unlocked && ability.points < 8;
+function canUnlock(ability) {
+  if (ability.unlocked) return false;
+  return ability.ultimate ? pendingUltimateUnlocks > 0 : pendingBasicUnlocks > 0;
 }
 
-function applyPick(abilityId) {
-  const ability = abilities.get(abilityId);
-  const target = targetLevel();
-  if (!ability || !canChoose(ability, target)) return false;
+function canUpgrade(ability) {
+  return ability.unlocked && ability.tier < abilityTierCosts.length && unspentAbilityPoints >= abilityTierCosts[ability.tier];
+}
 
-  let action;
-  if (target.reward === "Ability unlock") {
-    ability.unlocked = true;
-    action = "UNLOCKED";
-  } else {
-    const previousTier = tierFor(ability.points);
-    ability.points += 1;
-    const newTier = tierFor(ability.points);
-    action = newTier > previousTier ? `+1 AP · TIER ${["", "I", "II", "III"][newTier]}` : "+1 ABILITY POINT";
+function canGainLevel(target) {
+  return Boolean(target);
+}
+
+function applyAction(action) {
+  const target = targetLevel();
+  if (action.type === "gain-level") {
+    if (!canGainLevel(target)) return false;
+    currentLevel = target.level;
+    let reward;
+    if (target.reward === "Ability unlock" && target.level === 7) {
+      pendingUltimateUnlocks += 1;
+      reward = "+1 ULTIMATE UNLOCK";
+    } else if (target.reward === "Ability unlock") {
+      pendingBasicUnlocks += 1;
+      reward = "+1 BASIC UNLOCK";
+    } else {
+      unspentAbilityPoints += 1;
+      reward = "+1 ABILITY POINT";
+    }
+    return true;
   }
 
-  currentLevel = target.level;
-  order.push({ level: target.level, souls: target.souls, ability: ability.name, action });
-  return true;
+  const ability = abilities.get(action.abilityId);
+  if (!ability) return false;
+
+  if (action.type === "unlock" && canUnlock(ability)) {
+    if (ability.ultimate) pendingUltimateUnlocks -= 1;
+    else pendingBasicUnlocks -= 1;
+    ability.unlocked = true;
+    const current = levels[Math.max(0, currentLevel)];
+    order.push({ level: Math.max(0, currentLevel), souls: current.souls, ability: ability.name, action: "UNLOCKED · BANKED TOKEN" });
+    return true;
+  }
+
+  if (action.type === "upgrade" && canUpgrade(ability)) {
+    const cost = abilityTierCosts[ability.tier];
+    ability.tier += 1;
+    unspentAbilityPoints -= cost;
+    const current = levels[Math.max(0, currentLevel)];
+    order.push({ level: Math.max(0, currentLevel), souls: current.souls, ability: ability.name, action: `TIER ${["", "I", "II", "III"][ability.tier]} · -${cost} AP` });
+    return true;
+  }
+
+  return false;
 }
 
 function rebuildProgress() {
   currentLevel = -1;
+  unspentAbilityPoints = 0;
+  pendingBasicUnlocks = 0;
+  pendingUltimateUnlocks = 0;
   order = [];
   abilities.forEach((ability) => {
     ability.unlocked = false;
-    ability.points = 0;
+    ability.tier = 0;
   });
-  picks.forEach((abilityId) => applyPick(abilityId));
+  actions.forEach((action) => applyAction(action));
 }
 
 function promptFor(target) {
   if (!target) return { heading: "MAXIMUM LEVEL", prompt: "All 35 boon levels are assigned." };
   if (target.reward === "Ability unlock") {
-    if (target.level === 7) return { heading: `LEVEL ${target.level} · ULTIMATE UNLOCK`, prompt: "Unlock your Ultimate to advance this level." };
+    if (target.level === 7) return { heading: `LEVEL ${target.level} · ULTIMATE UNLOCK`, prompt: "Gain this level to bank an Ultimate unlock, then assign it whenever you're ready." };
     const heading = target.level === 0 ? "STARTING ABILITY" : `LEVEL ${target.level} · ABILITY UNLOCK`;
-    return { heading, prompt: "Choose an unassigned basic ability to unlock." };
+    return { heading, prompt: "Gain this level to bank a basic ability unlock. You can assign it later." };
   }
-  return { heading: `LEVEL ${target.level} · ABILITY POINT`, prompt: "Spend this point on an unlocked ability. Picks advance the boon level." };
+  return { heading: `LEVEL ${target.level} · ABILITY POINT`, prompt: "Gain this level to bank 1 ability point. Upgrades are optional and spend points separately." };
 }
 
 function renderOrder() {
@@ -112,16 +134,22 @@ function render() {
   const current = levels[Math.max(0, currentLevel)];
   const prompt = promptFor(target);
   const souls = current.souls;
+  const canAdvance = canGainLevel(target);
 
   soulsValue.textContent = formatSouls(souls);
   levelValue.textContent = currentLevel < 0 ? "READY" : String(currentLevel).padStart(2, "0");
   rewardValue.textContent = target ? `LEVEL ${target.level} · ${target.reward}` : "ALL REWARDS ASSIGNED";
   nextValue.textContent = target ? `${currentLevel < 0 ? "START" : "NEXT"} ${formatSouls(target.souls)}` : "MAX LEVEL";
+  unspentValue.textContent = String(unspentAbilityPoints);
+  unspentUnlocks.textContent = `${pendingBasicUnlocks} BASIC · ${pendingUltimateUnlocks} ULT`;
   progressFill.style.width = `${(Math.max(currentLevel, 0) / 35) * 100}%`;
   progressTrack.setAttribute("aria-valuenow", String(Math.max(currentLevel, 0)));
   choiceHeading.textContent = prompt.heading;
   choicePrompt.textContent = prompt.prompt;
-  undoButton.disabled = picks.length === 0;
+  gainLevelButton.disabled = !canAdvance;
+  gainLevelButton.childNodes[0].textContent = canAdvance ? "GAIN LEVEL " : "MAX LEVEL ";
+  gainLevelButton.querySelector("span").textContent = !target ? "ALL BOON LEVELS CLAIMED" : target.reward === "Ability unlock" ? target.level === 7 ? "BANK +1 ULTIMATE UNLOCK" : "BANK +1 BASIC UNLOCK" : "BANK +1 ABILITY POINT";
+  undoButton.disabled = actions.length === 0;
   document.title = `${currentLevel < 0 ? "Ready" : `Level ${currentLevel}`} · ${formatSouls(souls)} souls | Boon Picker`;
 
   abilities.forEach((ability) => {
@@ -129,19 +157,21 @@ function render() {
     const status = button.querySelector(".ability-status");
     const next = button.querySelector(".ability-next");
     const action = button.querySelector(".ability-action");
-    const available = canChoose(ability, target);
-    const upcomingTier = ability.unlocked ? nextTier(ability.points) : null;
+    const availableToUnlock = canUnlock(ability);
+    const availableToUpgrade = canUpgrade(ability);
+    const nextCost = abilityTierCosts[ability.tier];
 
-    button.disabled = !available;
-    button.classList.toggle("is-available", available);
+    button.disabled = !availableToUnlock && !availableToUpgrade;
+    button.classList.toggle("is-available", availableToUnlock || availableToUpgrade);
     if (ability.unlocked) {
-      status.textContent = `TIER ${tierFor(ability.points)} · ${ability.points}/8 AP`;
-      next.textContent = upcomingTier ? `${upcomingTier.remaining} AP TO TIER ${["", "I", "II", "III"][upcomingTier.tier]}` : "MAX TIER";
-      action.textContent = available ? "UPGRADE" : "";
+      status.textContent = `TIER ${ability.tier} / 3`;
+      next.textContent = nextCost ? `COST ${nextCost} AP · ${unspentAbilityPoints} BANKED` : "MAX TIER";
+      action.textContent = nextCost ? (availableToUpgrade ? `UPGRADE · ${nextCost} AP` : `NEED ${nextCost} AP`) : "";
     } else {
-      status.textContent = ability.ultimate && target?.level !== 7 ? "LOCKED UNTIL LEVEL 7" : "LOCKED";
+      const nextBasicUnlock = levels.find((item) => item.level > currentLevel && item.reward === "Ability unlock" && item.level !== 7);
+      status.textContent = availableToUnlock ? "READY TO UNLOCK" : ability.ultimate ? currentLevel < 7 ? "UNLOCK AT LEVEL 7" : "NO ULT TOKEN BANKED" : pendingBasicUnlocks ? "READY TO UNLOCK" : nextBasicUnlock ? currentLevel < 0 && nextBasicUnlock.level === 0 ? "GAIN LEVEL TO EARN" : `TOKEN AT LEVEL ${nextBasicUnlock.level}` : "NO TOKEN BANKED";
       next.textContent = "";
-      action.textContent = available ? "UNLOCK" : "";
+      action.textContent = availableToUnlock ? "UNLOCK" : "";
     }
   });
 
@@ -154,23 +184,33 @@ function render() {
   renderOrder();
 }
 
+function commitAction(action) {
+  if (!applyAction(action)) return;
+  actions.push(action);
+  render();
+}
+
 abilityCards.forEach((card) => {
   card.addEventListener("click", () => {
-    if (!canChoose(abilities.get(card.dataset.ability), targetLevel())) return;
-    picks.push(card.dataset.ability);
-    rebuildProgress();
-    render();
+    const ability = abilities.get(card.dataset.ability);
+    if (canUnlock(ability)) {
+      commitAction({ type: "unlock", abilityId: card.dataset.ability });
+    } else if (canUpgrade(ability)) {
+      commitAction({ type: "upgrade", abilityId: card.dataset.ability });
+    }
   });
 });
 
+gainLevelButton.addEventListener("click", () => commitAction({ type: "gain-level" }));
+
 undoButton.addEventListener("click", () => {
-  picks.pop();
+  actions.pop();
   rebuildProgress();
   render();
 });
 
 document.querySelector("#resetButton").addEventListener("click", () => {
-  picks = [];
+  actions = [];
   rebuildProgress();
   render();
 });
