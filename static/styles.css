@@ -45,15 +45,8 @@ button { color: inherit; }
 .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 10px rgba(120, 213, 191, .65); }
 .meta-divider { color: var(--coral); }
 
-.layout { width: min(1320px, calc(100% - 48px)); margin: 0 auto; padding: 70px 0 64px; display: grid; grid-template-columns: minmax(210px, .7fr) minmax(520px, 1.6fr); gap: clamp(42px, 8vw, 126px); align-items: start; }
-.intro { position: sticky; top: 38px; padding-top: 21px; }
-.eyebrow, .label { color: var(--mint); font-size: 10px; font-weight: 800; letter-spacing: 1.6px; }
-.eyebrow { display: flex; align-items: center; gap: 11px; }
-.eyebrow span { color: var(--coral); }
-h1 { margin: 24px 0 20px; font-family: Impact, "Arial Narrow", sans-serif; font-size: clamp(62px, 8vw, 112px); font-weight: 400; line-height: .84; letter-spacing: 0; }
-h1 em { color: var(--acid); font-style: normal; }
-.intro-copy { max-width: 270px; margin: 26px 0 42px; color: #aab4ad; font-size: 15px; line-height: 1.65; }
-.rule-line { display: flex; justify-content: space-between; max-width: 275px; padding-top: 12px; border-top: 1px solid var(--line); color: #7d8981; font-size: 9px; font-weight: 700; letter-spacing: 1.2px; }
+.layout { width: min(920px, calc(100% - 48px)); margin: 0 auto; padding: 32px 0 64px; }
+.label { color: var(--mint); font-size: 10px; font-weight: 800; letter-spacing: 1.6px; }
 
 .picker { min-width: 0; }
 .summary { position: sticky; z-index: 3; top: 0; padding: 23px 26px 17px; border: 1px solid #49564c; background: rgba(26, 33, 30, .97); box-shadow: 0 12px 30px rgba(0, 0, 0, .2); }
@@ -139,11 +132,6 @@ h2 { margin: 5px 0 0; font-family: Impact, "Arial Narrow", sans-serif; font-size
 .source-line a span { color: var(--coral); }
 
 @media (max-width: 850px) {
-  .layout { grid-template-columns: 1fr; gap: 30px; padding-top: 42px; }
-  .intro { position: static; padding: 0; }
-  h1 { margin: 17px 0 13px; font-size: 68px; }
-  .intro-copy { max-width: 440px; margin: 0 0 18px; }
-  .rule-line { display: none; }
   .summary { top: 0; }
 }
 
@@ -153,7 +141,6 @@ h2 { margin: 5px 0 0; font-family: Impact, "Arial Narrow", sans-serif; font-size
   .wordmark { gap: 8px; font-size: 9px; letter-spacing: 1px; }
   .mark { width: 25px; height: 25px; }
   .layout { width: calc(100% - 32px); padding-top: 32px; }
-  h1 { font-size: 58px; }
   .summary { padding: 18px 17px 14px; }
   .souls-value { font-size: 46px; }
   .level-stamp { min-width: 66px; padding-left: 12px; }
