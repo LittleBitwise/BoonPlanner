@@ -78,7 +78,7 @@ function applyAction(action) {
     if (ability.ultimate) pendingUltimateUnlocks -= 1;
     else pendingBasicUnlocks -= 1;
     ability.unlocked = true;
-    order.push({ abilityId: action.abilityId, ability: ability.name, action: "UNLOCK" });
+    order.push({ abilityId: action.abilityId, ability: ability.name });
     return true;
   }
 
@@ -86,7 +86,7 @@ function applyAction(action) {
     const cost = abilityTierCosts[ability.tier];
     ability.tier += 1;
     unspentAbilityPoints -= cost;
-    order.push({ abilityId: action.abilityId, ability: ability.name, action: `TIER ${["", "I", "II", "III"][ability.tier]} · -${cost} AP` });
+    order.push({ abilityId: action.abilityId, ability: ability.name, cost });
     return true;
   }
 
@@ -124,9 +124,12 @@ function renderOrder() {
     const track = document.createElement("div");
     track.className = "ability-track";
     track.setAttribute("role", "listitem");
-    const points = order.map((entry, index) => entry.abilityId === abilityId
-      ? `<span class="order-point" role="listitem" aria-label="Pick ${index + 1}: ${entry.ability}, ${entry.action}" title="Pick ${index + 1}: ${entry.action}"><span>${String(index + 1).padStart(2, "0")}</span><small>${entry.action}</small></span>`
-      : '<span class="order-slot" aria-hidden="true"></span>');
+    const points = order.map((entry, index) => {
+      if (entry.abilityId !== abilityId) return '<span class="order-slot" aria-hidden="true"></span>';
+      const description = entry.cost ? `upgrade costing ${entry.cost} AP` : "unlock";
+      const costLabel = entry.cost ? `<small>${entry.cost}AP</small>` : "";
+      return `<span class="order-point" role="listitem" aria-label="Pick ${index + 1}: ${entry.ability}, ${description}" title="Pick ${index + 1}: ${description}"><span>${String(index + 1).padStart(2, "0")}</span>${costLabel}</span>`;
+    });
     track.innerHTML = `<strong class="track-name">${ability.name}</strong><div class="track-line" role="list" aria-label="${ability.name} picks">${points.join("")}</div>`;
     return track;
   }));

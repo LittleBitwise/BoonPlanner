@@ -110,10 +110,10 @@ h2 { margin: 5px 0 0; font-family: Impact, "Arial Narrow", sans-serif; font-size
 .build-order[hidden] { display: none; }
 .ability-track { display: grid; min-height: 64px; grid-template-columns: 104px minmax(0, 1fr); align-items: center; gap: 12px; border-bottom: 1px solid rgba(57, 67, 61, .8); }
 .track-name { color: var(--paper); font-size: 10px; font-weight: 800; }
-.track-line { position: relative; display: flex; min-width: 0; min-height: 46px; align-items: center; gap: 9px; overflow-x: auto; }
+.track-line { position: relative; display: grid; min-width: 0; min-height: 46px; grid-template-columns: repeat(16, minmax(0, 1fr)); align-items: center; gap: 2px; overflow: hidden; }
 .track-line::before { position: absolute; top: 50%; right: 0; left: 0; height: 1px; background: #46534a; content: ""; }
-.order-point { position: relative; z-index: 1; display: grid; flex: 0 0 auto; width: 42px; min-height: 42px; align-content: center; justify-items: center; gap: 2px; border: 1px solid #718268; background: #222b27; color: var(--acid); }
-.order-slot { flex: 0 0 42px; min-height: 42px; }
+.order-point { position: relative; z-index: 1; display: grid; min-width: 0; min-height: 42px; align-content: center; justify-items: center; gap: 2px; border: 1px solid #718268; background: #222b27; color: var(--acid); }
+.order-slot { min-width: 0; min-height: 42px; }
 .order-point > span { font-family: Impact, "Arial Narrow", sans-serif; font-size: 14px; line-height: 1; }
 .order-point small { color: #c1cbbf; font-size: 7px; font-weight: 800; line-height: 1; white-space: nowrap; }
 .thresholds { margin-top: 28px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
@@ -168,7 +168,9 @@ h2 { margin: 5px 0 0; font-family: Impact, "Arial Narrow", sans-serif; font-size
   .ability-card { min-height: 106px; }
   .ability-track { grid-template-columns: 76px minmax(0, 1fr); gap: 8px; }
   .track-name { font-size: 8px; }
-  .order-point { width: 38px; min-height: 38px; }
+  .order-point, .order-slot { min-height: 28px; }
+  .order-point > span { font-size: 8px; }
+  .order-point small { font-size: 4.75px; }
   .level-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
   .level-card { padding: 9px; aspect-ratio: 1.13; }
   .card-level { font-size: 20px; }
