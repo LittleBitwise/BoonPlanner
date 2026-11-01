@@ -7,14 +7,14 @@ SOUL_THRESHOLDS = (
     23100, 25200, 27500, 30000, 32700, 35600, 38700, 42000,
     45500, 49200,
 )
-ABILITY_UNLOCK_LEVELS = {2, 4, 7}
+ABILITY_UNLOCK_LEVELS = {0, 2, 4, 7}
 
 
 def build_levels():
     levels = []
     for level, souls in enumerate(SOUL_THRESHOLDS):
         if level == 0:
-            reward = "Starting level"
+            reward = "Ability unlock"
             cost = 0
         else:
             reward = "Ability unlock" if level in ABILITY_UNLOCK_LEVELS else "Ability point"

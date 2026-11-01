@@ -18,7 +18,7 @@
     <section class="intro" aria-labelledby="page-title">
       <div class="eyebrow"><span>01</span> MATCH PLANNER</div>
       <h1 id="page-title">BOON<br><em>PICKER</em></h1>
-      <p class="intro-copy">Choose a boon level to see the souls required to reach it.</p>
+      <p class="intro-copy">Choose each ability unlock or upgrade in order. Every pick advances the build and updates its soul total.</p>
       <div class="rule-line"><span>LEVEL 0</span><span>LEVEL 35</span></div>
     </section>
 
@@ -29,41 +29,67 @@
             <div class="label">TOTAL SOULS REQUIRED</div>
             <div class="souls-value"><span id="soulsValue">600</span><span class="soul-unit">SOULS</span></div>
           </div>
-          <div class="level-stamp"><span class="label">BOON LEVEL</span><strong id="levelValue">00</strong></div>
+          <div class="level-stamp"><span class="label">BOON LEVEL</span><strong id="levelValue">READY</strong></div>
         </div>
         <div class="progress-track" role="progressbar" aria-label="Selected boon progression" aria-valuemin="0" aria-valuemax="35" aria-valuenow="0">
           <div class="progress-fill" id="progressFill"></div>
         </div>
         <div class="summary-bottom">
-          <span id="rewardValue">Starting level</span>
-          <span id="nextValue">NEXT <b>800</b></span>
+          <span id="rewardValue">LEVEL 0 · ABILITY UNLOCK</span>
+          <span id="nextValue">START PICK</span>
         </div>
       </div>
 
       <div class="picker-heading">
-        <div><span class="label">SELECT A MILESTONE</span><h2>BOON LEVEL</h2></div>
-        <div class="stepper" aria-label="Change selected boon level">
-          <button type="button" class="step-button" id="previousButton" aria-label="Previous level" title="Previous level">−</button>
-          <button type="button" class="step-button" id="nextButton" aria-label="Next level" title="Next level">+</button>
-          <button type="button" class="reset-button" id="resetButton" title="Reset to starting level">RESET</button>
+        <div><span class="label">NEXT REWARD</span><h2 id="choiceHeading">STARTING ABILITY</h2></div>
+        <div class="stepper" aria-label="Manage ability order">
+          <button type="button" class="reset-button" id="undoButton" title="Undo the last ability choice" disabled>UNDO</button>
+          <button type="button" class="reset-button" id="resetButton" title="Clear the ability order">RESET</button>
         </div>
       </div>
+      <p class="choice-prompt" id="choicePrompt">Choose one of the first three abilities to unlock at level 0.</p>
 
-      <div class="level-grid" role="group" aria-label="Choose boon level">
+      <div class="ability-grid" id="abilityGrid" role="group" aria-label="Choose an ability to unlock or upgrade">
+        <button type="button" class="ability-card" data-ability="ability-1">
+          <span class="ability-index">01</span><strong>ABILITY 1</strong><span class="ability-status">LOCKED</span><span class="ability-next"></span><span class="ability-action">UNLOCK</span>
+        </button>
+        <button type="button" class="ability-card" data-ability="ability-2">
+          <span class="ability-index">02</span><strong>ABILITY 2</strong><span class="ability-status">LOCKED</span><span class="ability-next"></span><span class="ability-action">UNLOCK</span>
+        </button>
+        <button type="button" class="ability-card" data-ability="ability-3">
+          <span class="ability-index">03</span><strong>ABILITY 3</strong><span class="ability-status">LOCKED</span><span class="ability-next"></span><span class="ability-action">UNLOCK</span>
+        </button>
+        <button type="button" class="ability-card is-ultimate" data-ability="ultimate">
+          <span class="ability-index">04</span><strong>ULTIMATE</strong><span class="ability-status">LOCKED</span><span class="ability-next"></span><span class="ability-action">UNLOCK</span>
+        </button>
+      </div>
+
+      <section class="build-section" aria-labelledby="buildTitle">
+        <div class="section-heading"><div><span class="label">YOUR SEQUENCE</span><h2 id="buildTitle">BUILD ORDER</h2></div><span class="order-count" id="orderCount">0 PICKS</span></div>
+        <p class="empty-order" id="emptyOrder">Your first pick unlocks a basic ability at 600 souls.</p>
+        <ol class="build-order" id="buildOrder" aria-live="polite"></ol>
+      </section>
+
+      <details class="thresholds">
+        <summary><span>SOUL THRESHOLDS</span><span>LEVELS 0–35</span></summary>
+        <div class="level-grid" id="levelGrid" aria-label="Boon soul thresholds">
         {% for item in levels %}
-        <button type="button" class="level-card{% if item.level == 0 %} is-selected{% endif %}" data-level="{{ item.level }}" data-souls="{{ item.souls }}" data-cost="{{ item.cost }}" data-reward="{{ item.reward }}" aria-pressed="{{ 'true' if item.level == 0 else 'false' }}">
+        <div class="level-card" data-level="{{ item.level }}" data-souls="{{ item.souls }}">
           <span class="card-level">{{ '%02d'|format(item.level) }}</span>
           <span class="card-souls">{{ '{:,}'.format(item.souls) }}</span>
-          {% if item.level == 0 %}<span class="card-note">START</span>{% elif item.level in [2, 4, 7] %}<span class="card-note unlock-note">UNLOCK</span>{% else %}<span class="card-note">+{{ '{:,}'.format(item.cost) }}</span>{% endif %}
-        </button>
+          {% if item.reward == 'Ability unlock' %}<span class="card-note unlock-note">UNLOCK</span>{% else %}<span class="card-note">+{{ '{:,}'.format(item.cost) }}</span>{% endif %}
+        </div>
         {% endfor %}
-      </div>
+        </div>
+      </details>
 
       <footer class="source-line">
         <span>PROGRESSION DATA</span>
         <a href="https://deadlock.wiki/Boon" target="_blank" rel="noreferrer">DEADLOCK WIKI: BOON <span aria-hidden="true">↗</span></a>
+        <a href="https://deadlock.wiki/Abilities" target="_blank" rel="noreferrer">ABILITY POINTS <span aria-hidden="true">↗</span></a>
       </footer>
     </section>
   </main>
+  <script id="boon-levels" type="application/json">{{ levels|tojson }}</script>
 </body>
 </html>

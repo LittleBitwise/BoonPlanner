@@ -15,9 +15,12 @@ class BoonPickerTests(unittest.TestCase):
 
     def test_levels_include_cost_and_reward_data(self):
         levels = build_levels()
-        self.assertEqual(levels[0]["reward"], "Starting level")
+        self.assertEqual(levels[0]["reward"], "Ability unlock")
         self.assertEqual(levels[1]["cost"], 200)
         self.assertEqual(levels[2]["reward"], "Ability unlock")
+        self.assertEqual(levels[4]["reward"], "Ability unlock")
+        self.assertEqual(levels[7]["reward"], "Ability unlock")
+        self.assertEqual(levels[1]["reward"], "Ability point")
         self.assertEqual(levels[-1]["souls"], 49200)
 
     def test_picker_and_api_are_available(self):
