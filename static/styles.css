@@ -21,7 +21,6 @@ body {
   margin: 0;
   color: var(--paper);
   background-color: var(--ink);
-  background-image: linear-gradient(rgba(190, 218, 196, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(190, 218, 196, .035) 1px, transparent 1px);
   background-size: 44px 44px;
 }
 
@@ -95,13 +94,13 @@ h2 { margin: 5px 0 0; font-family: Impact, "Arial Narrow", sans-serif; font-size
 .ability-next { grid-column: 1; color: #829087; font-size: 9px; font-weight: 700; letter-spacing: .6px; }
 .ability-action { grid-column: 2; grid-row: 4; color: var(--acid); font-size: 9px; font-weight: 900; letter-spacing: 1px; }
 .build-section { margin-top: 37px; }
-.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding-bottom: 12px; }
 .section-heading h2 { margin-top: 5px; }
 .order-count { color: var(--coral); font-size: 9px; font-weight: 800; letter-spacing: 1px; }
 .empty-order { margin: 0; padding: 17px 0; color: #829087; font-size: 12px; }
 .build-order { display: grid; gap: 0; margin: 0; }
 .build-order[hidden] { display: none; }
-.ability-track { display: grid; min-height: 64px; grid-template-columns: 104px minmax(0, 1fr); align-items: center; gap: 12px; border-bottom: 1px solid rgba(57, 67, 61, .8); }
+.ability-track { display: grid; min-height: 64px; grid-template-columns: 104px minmax(0, 1fr); align-items: center; gap: 12px; }
 .track-name { color: var(--paper); font-size: 10px; font-weight: 800; }
 .track-line { position: relative; display: grid; min-width: 0; min-height: 46px; grid-template-columns: repeat(16, minmax(0, 1fr)); align-items: center; gap: 2px; overflow: hidden; }
 .track-line::before { position: absolute; top: 50%; right: 0; left: 0; height: 1px; background: #46534a; content: ""; }
