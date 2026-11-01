@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101513">
+  <title>Boon Picker | Deadlock</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="wordmark" href="/" aria-label="Boon Picker home"><span class="mark">D</span><span>DEADLOCK <i>/</i> FIELD TOOL</span></a>
+    <div class="top-meta"><span class="live-dot"></span> BOON PROGRESSION <span class="meta-divider">/</span> 35 LEVELS</div>
+  </header>
+
+  <main class="layout">
+    <section class="intro" aria-labelledby="page-title">
+      <div class="eyebrow"><span>01</span> MATCH PLANNER</div>
+      <h1 id="page-title">BOON<br><em>PICKER</em></h1>
+      <p class="intro-copy">Choose a boon level to see the souls required to reach it.</p>
+      <div class="rule-line"><span>LEVEL 0</span><span>LEVEL 35</span></div>
+    </section>
+
+    <section class="picker" aria-label="Boon level picker">
+      <div class="summary" aria-live="polite" aria-atomic="true">
+        <div class="summary-top">
+          <div>
+            <div class="label">TOTAL SOULS REQUIRED</div>
+            <div class="souls-value"><span id="soulsValue">600</span><span class="soul-unit">SOULS</span></div>
+          </div>
+          <div class="level-stamp"><span class="label">BOON LEVEL</span><strong id="levelValue">00</strong></div>
+        </div>
+        <div class="progress-track" role="progressbar" aria-label="Selected boon progression" aria-valuemin="0" aria-valuemax="35" aria-valuenow="0">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="summary-bottom">
+          <span id="rewardValue">Starting level</span>
+          <span id="nextValue">NEXT <b>800</b></span>
+        </div>
+      </div>
+
+      <div class="picker-heading">
+        <div><span class="label">SELECT A MILESTONE</span><h2>BOON LEVEL</h2></div>
+        <div class="stepper" aria-label="Change selected boon level">
+          <button type="button" class="step-button" id="previousButton" aria-label="Previous level" title="Previous level">−</button>
+          <button type="button" class="step-button" id="nextButton" aria-label="Next level" title="Next level">+</button>
+          <button type="button" class="reset-button" id="resetButton" title="Reset to starting level">RESET</button>
+        </div>
+      </div>
+
+      <div class="level-grid" role="group" aria-label="Choose boon level">
+        {% for item in levels %}
+        <button type="button" class="level-card{% if item.level == 0 %} is-selected{% endif %}" data-level="{{ item.level }}" data-souls="{{ item.souls }}" data-cost="{{ item.cost }}" data-reward="{{ item.reward }}" aria-pressed="{{ 'true' if item.level == 0 else 'false' }}">
+          <span class="card-level">{{ '%02d'|format(item.level) }}</span>
+          <span class="card-souls">{{ '{:,}'.format(item.souls) }}</span>
+          {% if item.level == 0 %}<span class="card-note">START</span>{% elif item.level in [2, 4, 7] %}<span class="card-note unlock-note">UNLOCK</span>{% else %}<span class="card-note">+{{ '{:,}'.format(item.cost) }}</span>{% endif %}
+        </button>
+        {% endfor %}
+      </div>
+
+      <footer class="source-line">
+        <span>PROGRESSION DATA</span>
+        <a href="https://deadlock.wiki/Boon" target="_blank" rel="noreferrer">DEADLOCK WIKI: BOON <span aria-hidden="true">↗</span></a>
+      </footer>
+    </section>
+  </main>
+</body>
+</html>
