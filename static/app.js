@@ -25,9 +25,9 @@ const abilities = new Map(abilityCards.map((card) => [card.dataset.ability, {
   tier: 0,
 }]));
 let actions = [];
-let currentLevel = -1;
+let currentLevel = 0;
 let unspentAbilityPoints = 0;
-let pendingBasicUnlocks = 0;
+let pendingBasicUnlocks = 1;
 let pendingUltimateUnlocks = 0;
 let order = [];
 
@@ -94,9 +94,9 @@ function applyAction(action) {
 }
 
 function rebuildProgress() {
-  currentLevel = -1;
+  currentLevel = 0;
   unspentAbilityPoints = 0;
-  pendingBasicUnlocks = 0;
+  pendingBasicUnlocks = 1;
   pendingUltimateUnlocks = 0;
   order = [];
   abilities.forEach((ability) => {

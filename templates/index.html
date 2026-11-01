@@ -29,28 +29,28 @@
             <div class="label">TOTAL SOULS REQUIRED</div>
             <div class="souls-value"><span id="soulsValue">600</span><span class="soul-unit">SOULS</span></div>
           </div>
-          <div class="level-stamp"><span class="label">BOON LEVEL</span><strong id="levelValue">READY</strong></div>
+          <div class="level-stamp"><span class="label">BOON LEVEL</span><strong id="levelValue">00</strong></div>
         </div>
         <div class="progress-track" role="progressbar" aria-label="Selected boon progression" aria-valuemin="0" aria-valuemax="35" aria-valuenow="0">
           <div class="progress-fill" id="progressFill"></div>
         </div>
         <div class="summary-bottom">
-          <span id="rewardValue">LEVEL 0 · ABILITY UNLOCK</span>
+          <span id="rewardValue">LEVEL 1 · ABILITY POINT</span>
           <span class="unspent-display">UNSPENT AP <b id="unspentValue">0</b></span>
-          <span class="unlock-bank">UNSPENT UNLOCKS <b id="unspentUnlocks">0 BASIC · 0 ULT</b></span>
-          <span id="nextValue">START PICK</span>
+          <span class="unlock-bank">UNSPENT UNLOCKS <b id="unspentUnlocks">1 BASIC · 0 ULT</b></span>
+          <span id="nextValue">NEXT 800</span>
         </div>
       </div>
 
       <div class="picker-heading">
-        <div><span class="label">NEXT REWARD</span><h2 id="choiceHeading">STARTING ABILITY</h2></div>
+        <div><span class="label">NEXT REWARD</span><h2 id="choiceHeading">LEVEL 1 · ABILITY POINT</h2></div>
         <div class="stepper" aria-label="Manage ability order">
           <button type="button" class="reset-button" id="undoButton" title="Undo the last ability choice" disabled>UNDO</button>
           <button type="button" class="reset-button" id="resetButton" title="Clear the ability order">RESET</button>
         </div>
       </div>
-      <p class="choice-prompt" id="choicePrompt">Gain the starting level to bank an ability unlock. You can assign it later.</p>
-      <button type="button" class="gain-level-button" id="gainLevelButton">GAIN LEVEL <span>BANK +1 BASIC UNLOCK</span></button>
+      <p class="choice-prompt" id="choicePrompt">Gain this level to bank 1 ability point. Upgrades are optional and spend points separately.</p>
+      <button type="button" class="gain-level-button" id="gainLevelButton">GAIN LEVEL <span>BANK +1 ABILITY POINT</span></button>
 
       <div class="ability-grid" id="abilityGrid" role="group" aria-label="Choose an ability to unlock or upgrade">
         <button type="button" class="ability-card" data-ability="ability-1">
