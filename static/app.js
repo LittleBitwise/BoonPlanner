@@ -78,8 +78,7 @@ function applyAction(action) {
     if (ability.ultimate) pendingUltimateUnlocks -= 1;
     else pendingBasicUnlocks -= 1;
     ability.unlocked = true;
-    const current = levels[Math.max(0, currentLevel)];
-    order.push({ level: Math.max(0, currentLevel), souls: current.souls, ability: ability.name, action: "UNLOCKED · BANKED TOKEN" });
+    order.push({ abilityId: action.abilityId, ability: ability.name, action: "UNLOCK" });
     return true;
   }
 
@@ -87,8 +86,7 @@ function applyAction(action) {
     const cost = abilityTierCosts[ability.tier];
     ability.tier += 1;
     unspentAbilityPoints -= cost;
-    const current = levels[Math.max(0, currentLevel)];
-    order.push({ level: Math.max(0, currentLevel), souls: current.souls, ability: ability.name, action: `TIER ${["", "I", "II", "III"][ability.tier]} · -${cost} AP` });
+    order.push({ abilityId: action.abilityId, ability: ability.name, action: `TIER ${["", "I", "II", "III"][ability.tier]} · -${cost} AP` });
     return true;
   }
 
@@ -121,11 +119,16 @@ function promptFor(target) {
 function renderOrder() {
   orderCount.textContent = `${order.length} ${order.length === 1 ? "PICK" : "PICKS"}`;
   emptyOrder.hidden = order.length > 0;
-  buildOrder.replaceChildren(...order.map((entry, index) => {
-    const item = document.createElement("li");
-    item.className = "order-item";
-    item.innerHTML = `<span class="order-index">${String(index + 1).padStart(2, "0")}</span><span class="order-level">LVL ${String(entry.level).padStart(2, "0")}<small>${formatSouls(entry.souls)} SOULS</small></span><strong class="order-ability">${entry.ability}</strong><span class="order-action">${entry.action}</span>`;
-    return item;
+  buildOrder.hidden = order.length === 0;
+  buildOrder.replaceChildren(...[...abilities.entries()].map(([abilityId, ability]) => {
+    const track = document.createElement("div");
+    track.className = "ability-track";
+    track.setAttribute("role", "listitem");
+    const points = order.flatMap((entry, index) => entry.abilityId === abilityId ? [
+      `<span class="order-point" role="listitem" aria-label="Pick ${index + 1}: ${entry.ability}, ${entry.action}" title="Pick ${index + 1}: ${entry.action}"><span>${String(index + 1).padStart(2, "0")}</span><small>${entry.action}</small></span>`,
+    ] : []);
+    track.innerHTML = `<strong class="track-name">${ability.name}</strong><div class="track-line" role="list" aria-label="${ability.name} picks">${points.join("")}</div>`;
+    return track;
   }));
 }
 

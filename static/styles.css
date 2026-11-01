@@ -106,13 +106,15 @@ h2 { margin: 5px 0 0; font-family: Impact, "Arial Narrow", sans-serif; font-size
 .section-heading h2 { margin-top: 5px; }
 .order-count { color: var(--coral); font-size: 9px; font-weight: 800; letter-spacing: 1px; }
 .empty-order { margin: 0; padding: 17px 0; color: #829087; font-size: 12px; }
-.build-order { margin: 0; padding: 0; list-style: none; }
-.order-item { display: grid; grid-template-columns: 28px 90px minmax(100px, 1fr) minmax(110px, auto); align-items: center; gap: 10px; min-height: 52px; border-bottom: 1px solid rgba(57, 67, 61, .8); }
-.order-index { color: #77847a; font-family: Impact, sans-serif; font-size: 17px; }
-.order-level { color: var(--mint); font-size: 9px; font-weight: 800; letter-spacing: .7px; }
-.order-level small { display: block; margin-top: 3px; color: #7f8a82; font-size: 8px; letter-spacing: .3px; }
-.order-ability { font-size: 11px; }
-.order-action { color: var(--acid); font-size: 8px; font-weight: 800; letter-spacing: .5px; text-align: right; }
+.build-order { display: grid; gap: 0; margin: 0; }
+.build-order[hidden] { display: none; }
+.ability-track { display: grid; min-height: 64px; grid-template-columns: 104px minmax(0, 1fr); align-items: center; gap: 12px; border-bottom: 1px solid rgba(57, 67, 61, .8); }
+.track-name { color: var(--paper); font-size: 10px; font-weight: 800; }
+.track-line { position: relative; display: flex; min-width: 0; min-height: 46px; align-items: center; gap: 9px; overflow-x: auto; }
+.track-line::before { position: absolute; top: 50%; right: 0; left: 0; height: 1px; background: #46534a; content: ""; }
+.order-point { position: relative; z-index: 1; display: grid; flex: 0 0 auto; width: 42px; min-height: 42px; align-content: center; justify-items: center; gap: 2px; border: 1px solid #718268; background: #222b27; color: var(--acid); }
+.order-point > span { font-family: Impact, "Arial Narrow", sans-serif; font-size: 14px; line-height: 1; }
+.order-point small { color: #c1cbbf; font-size: 7px; font-weight: 800; line-height: 1; white-space: nowrap; }
 .thresholds { margin-top: 28px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .thresholds summary { display: flex; justify-content: space-between; gap: 12px; padding: 14px 0; color: var(--paper); cursor: pointer; font-size: 9px; font-weight: 800; letter-spacing: 1px; list-style: none; }
 .thresholds summary::-webkit-details-marker { display: none; }
@@ -163,8 +165,9 @@ h2 { margin: 5px 0 0; font-family: Impact, "Arial Narrow", sans-serif; font-size
   .unlock-bank { grid-column: 1 / -1; grid-row: 3; }
   .ability-grid { grid-template-columns: 1fr; }
   .ability-card { min-height: 106px; }
-  .order-item { grid-template-columns: 23px 76px minmax(75px, 1fr) minmax(90px, auto); gap: 6px; }
-  .order-action { font-size: 7px; }
+  .ability-track { grid-template-columns: 76px minmax(0, 1fr); gap: 8px; }
+  .track-name { font-size: 8px; }
+  .order-point { width: 38px; min-height: 38px; }
   .level-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
   .level-card { padding: 9px; aspect-ratio: 1.13; }
   .card-level { font-size: 20px; }
