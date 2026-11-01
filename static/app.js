@@ -124,9 +124,9 @@ function renderOrder() {
     const track = document.createElement("div");
     track.className = "ability-track";
     track.setAttribute("role", "listitem");
-    const points = order.flatMap((entry, index) => entry.abilityId === abilityId ? [
-      `<span class="order-point" role="listitem" aria-label="Pick ${index + 1}: ${entry.ability}, ${entry.action}" title="Pick ${index + 1}: ${entry.action}"><span>${String(index + 1).padStart(2, "0")}</span><small>${entry.action}</small></span>`,
-    ] : []);
+    const points = order.map((entry, index) => entry.abilityId === abilityId
+      ? `<span class="order-point" role="listitem" aria-label="Pick ${index + 1}: ${entry.ability}, ${entry.action}" title="Pick ${index + 1}: ${entry.action}"><span>${String(index + 1).padStart(2, "0")}</span><small>${entry.action}</small></span>`
+      : '<span class="order-slot" aria-hidden="true"></span>');
     track.innerHTML = `<strong class="track-name">${ability.name}</strong><div class="track-line" role="list" aria-label="${ability.name} picks">${points.join("")}</div>`;
     return track;
   }));
