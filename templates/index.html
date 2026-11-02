@@ -13,20 +13,15 @@
     <section class="picker" aria-label="Boon level picker">
       <div class="summary" aria-live="polite" aria-atomic="true">
         <div class="summary-top">
-          <div>
+          <div class="summary-metric souls-metric">
             <div class="label">TOTAL SOULS REQUIRED</div>
-            <div class="souls-value"><span id="soulsValue">600</span><span class="soul-unit">SOULS</span></div>
+            <div class="souls-value"><span id="soulsValue">600</span></div>
           </div>
-          <div class="level-stamp"><span class="label">BOON LEVEL</span><strong id="levelValue">00</strong></div>
-        </div>
-        <div class="progress-track" role="progressbar" aria-label="Selected boon progression" aria-valuemin="0" aria-valuemax="35" aria-valuenow="0">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
-        <div class="summary-bottom">
-          <span id="rewardValue">LEVEL 1 · ABILITY POINT</span>
-          <span class="unspent-display">UNSPENT AP <b id="unspentValue">0</b></span>
-          <span class="unlock-bank">UNSPENT UNLOCKS <b id="unspentUnlocks">1 BASIC · 0 ULT</b></span>
-          <span id="nextValue">NEXT 800</span>
+          <div class="summary-metric ap-metric">
+            <span class="label">UNSPENT AP</span>
+            <strong id="unspentValue">0</strong>
+          </div>
+          <div class="summary-metric level-stamp"><span class="label">BOON LEVEL</span><strong id="levelValue">00</strong></div>
         </div>
       </div>
 
@@ -34,11 +29,12 @@
         <div class="section-heading">
           <div><h2 id="buildTitle">BUILD ORDER</h2></div>
           <div class="stepper" aria-label="Manage ability order">
+            <button type="button" class="reset-button" id="maxLevelButton" title="Claim all remaining boon levels">MAX LEVEL</button>
             <button type="button" class="reset-button" id="undoButton" title="Undo the last ability choice" disabled>UNDO</button>
             <button type="button" class="reset-button" id="resetButton" title="Clear the ability order">RESET</button>
           </div>
         </div>
-        <button type="button" class="gain-level-button" id="gainLevelButton">GAIN LEVEL <span>BANK +1 ABILITY POINT</span></button>
+        <button type="button" class="gain-level-button" id="gainLevelButton">GAIN LEVEL <span>+1 ABILITY POINT</span></button>
         <div class="build-order" id="buildOrder" role="group" aria-label="Choose abilities and view assignment order" aria-live="polite">
           <button type="button" class="ability-track" data-ability="ability-1">
             <strong class="track-name">ABILITY 1</strong><span class="track-line" aria-hidden="true"></span><span class="track-choice"><span class="ability-status">LOCKED</span><span class="ability-action">UNLOCK</span></span>

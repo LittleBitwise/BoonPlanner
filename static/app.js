@@ -3,15 +3,11 @@ const abilityTierCosts = JSON.parse(document.querySelector("#ability-tier-costs"
 const abilityTracks = [...document.querySelectorAll(".ability-track")];
 const soulsValue = document.querySelector("#soulsValue");
 const levelValue = document.querySelector("#levelValue");
-const rewardValue = document.querySelector("#rewardValue");
-const nextValue = document.querySelector("#nextValue");
 const unspentValue = document.querySelector("#unspentValue");
-const unspentUnlocks = document.querySelector("#unspentUnlocks");
-const progressFill = document.querySelector("#progressFill");
-const progressTrack = document.querySelector(".progress-track");
 const gainLevelButton = document.querySelector("#gainLevelButton");
 const buildOrder = document.querySelector("#buildOrder");
 const undoButton = document.querySelector("#undoButton");
+const maxLevelButton = document.querySelector("#maxLevelButton");
 const abilities = new Map(abilityTracks.map((track) => [track.dataset.ability, {
   track,
   name: track.querySelector(".track-name").textContent,
@@ -159,15 +155,12 @@ function render() {
 
   soulsValue.textContent = formatSouls(souls);
   levelValue.textContent = currentLevel < 0 ? "READY" : String(currentLevel).padStart(2, "0");
-  rewardValue.textContent = target ? `LEVEL ${target.level} · ${target.reward}` : "ALL REWARDS ASSIGNED";
-  nextValue.textContent = target ? `${currentLevel < 0 ? "START" : "NEXT"} ${formatSouls(target.souls)}` : "MAX LEVEL";
   unspentValue.textContent = String(unspentAbilityPoints);
-  unspentUnlocks.textContent = `${pendingBasicUnlocks} BASIC · ${pendingUltimateUnlocks} ULT`;
-  progressFill.style.width = `${(Math.max(currentLevel, 0) / 35) * 100}%`;
-  progressTrack.setAttribute("aria-valuenow", String(Math.max(currentLevel, 0)));
+  unspentValue.parentElement.classList.toggle("has-unspent-ap", unspentAbilityPoints > 0);
   gainLevelButton.disabled = !canAdvance;
+  maxLevelButton.disabled = !canAdvance;
   gainLevelButton.childNodes[0].textContent = canAdvance ? "GAIN LEVEL " : "MAX LEVEL ";
-  gainLevelButton.querySelector("span").textContent = !target ? "ALL BOON LEVELS CLAIMED" : target.reward === "Ability unlock" ? target.level === 7 ? "BANK +1 ULTIMATE UNLOCK" : "BANK +1 BASIC UNLOCK" : "BANK +1 ABILITY POINT";
+  gainLevelButton.querySelector("span").textContent = !target ? "ALL BOON LEVELS CLAIMED" : target.reward === "Ability unlock" ? target.level === 7 ? "+1 ULTIMATE UNLOCK" : "+1 BASIC UNLOCK" : "+1 ABILITY POINT";
   undoButton.disabled = actions.length === 0;
   document.title = `${currentLevel < 0 ? "Ready" : `Level ${currentLevel}`} · ${formatSouls(souls)} souls | Boon Picker`;
 
@@ -213,6 +206,13 @@ abilityTracks.forEach((track) => {
 });
 
 gainLevelButton.addEventListener("click", () => commitAction({ type: "gain-level" }));
+
+maxLevelButton.addEventListener("click", () => {
+  while (applyAction({ type: "gain-level" })) {
+    actions.push({ type: "gain-level" });
+  }
+  render();
+});
 
 undoButton.addEventListener("click", () => {
   actions.pop();
