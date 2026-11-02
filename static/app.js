@@ -1,5 +1,8 @@
 const levels = JSON.parse(document.querySelector("#boon-levels").textContent);
 const abilityTierCosts = JSON.parse(document.querySelector("#ability-tier-costs").textContent);
+const basicUnlockLevels = levels.filter((level) => level.reward === "Ability unlock" && level.level !== 7);
+const ultimateUnlockLevel = levels.find((level) => level.reward === "Ability unlock" && level.level === 7);
+const abilityPointLevels = levels.filter((level) => level.reward === "Ability point");
 const abilityTracks = [...document.querySelectorAll(".ability-track")];
 const soulsValue = document.querySelector("#soulsValue");
 const levelValue = document.querySelector("#levelValue");
@@ -102,6 +105,20 @@ function rebuildProgress() {
 }
 
 function renderOrder() {
+  let basicUnlockCount = 0;
+  let abilityPointsSpent = 0;
+  const pickThresholds = order.map((entry) => {
+    if (entry.cost === undefined) {
+      if (entry.abilityId === "ultimate") return ultimateUnlockLevel.souls;
+      return basicUnlockLevels[basicUnlockCount++].souls;
+    }
+
+    abilityPointsSpent += entry.cost;
+    let earnedAbilityPoints = 0;
+    const threshold = abilityPointLevels.find((level) => ++earnedAbilityPoints >= abilityPointsSpent);
+    return threshold.souls;
+  });
+
   abilities.forEach((ability, abilityId) => {
     const line = ability.track.querySelector(".track-line");
     line.replaceChildren(...order.map((entry, index) => {
@@ -112,7 +129,7 @@ function renderOrder() {
       }
       const point = document.createElement("span");
       point.className = "order-point";
-      point.title = `Pick ${String(index).padStart(2, "0")}: ${entry.cost ? `upgrade costing ${entry.cost} AP` : "unlock"}`;
+      point.title = `${formatSouls(pickThresholds[index])} souls required`;
       point.innerHTML = `<span>${String(index).padStart(2, "0")}</span>${entry.cost ? `<small>${entry.cost}AP</small>` : ""}`;
       return point;
     }));
