@@ -20,6 +20,6 @@ npm test
 
 ## Host on GitHub Pages
 
-The included GitHub Actions workflow tests the project and deploys the static page when changes are pushed to `main`. In the repository settings, set **Pages > Build and deployment > Source** to **GitHub Actions**. The workflow publishes only the page and its browser assets.
+The included GitHub Actions workflow tests the project and deploys the static page when changes are pushed to `static`. In the repository settings, set **Pages > Build and deployment > Source** to **GitHub Actions**. The workflow publishes only the page and its browser assets.
 
 Progression thresholds are transcribed from the [Deadlock Wiki Boon page](https://deadlock.wiki/Boon). This is an unofficial fan-made companion and is not affiliated with Valve.
