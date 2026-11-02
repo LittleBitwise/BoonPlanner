@@ -27,23 +27,6 @@ body {
 button, a { font: inherit; }
 button { color: inherit; }
 
-.topbar {
-  height: 66px;
-  padding: 0 clamp(20px, 5vw, 76px);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(232, 238, 232, .13);
-  background: rgba(16, 21, 19, .9);
-}
-
-.wordmark { display: flex; align-items: center; gap: 11px; color: var(--paper); text-decoration: none; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; }
-.wordmark i { color: var(--acid); font-style: normal; }
-.mark { display: grid; width: 29px; height: 29px; place-items: center; border: 1px solid var(--acid); color: var(--acid); font-size: 17px; font-family: Impact, sans-serif; }
-.top-meta { display: flex; align-items: center; gap: 9px; color: #b6c0b9; font-size: 10px; font-weight: 700; letter-spacing: 1.3px; }
-.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 10px rgba(120, 213, 191, .65); }
-.meta-divider { color: var(--coral); }
-
 .layout { width: min(920px, calc(100% - 48px)); margin: 0 auto; padding: 32px 0 64px; }
 .label { color: var(--mint); font-size: 10px; font-weight: 800; letter-spacing: 1.6px; }
 
@@ -100,7 +83,7 @@ h2 { margin: 5px 0 0; font-family: Impact, "Arial Narrow", sans-serif; font-size
 .order-slot { min-width: 0; min-height: 42px; }
 .order-point > span { font-family: Impact, "Arial Narrow", sans-serif; font-size: 14px; line-height: 1; }
 .order-point small { color: #c1cbbf; font-size: 7px; font-weight: 800; line-height: 1; white-space: nowrap; }
-.thresholds { margin-top: 28px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.thresholds { margin-top: 28px; border: none; }
 .thresholds summary { display: flex; justify-content: space-between; gap: 12px; padding: 14px 0; color: var(--paper); cursor: pointer; font-size: 9px; font-weight: 800; letter-spacing: 1px; list-style: none; }
 .thresholds summary::-webkit-details-marker { display: none; }
 .thresholds summary::after { margin-left: auto; color: var(--coral); content: "+"; }
@@ -127,10 +110,6 @@ h2 { margin: 5px 0 0; font-family: Impact, "Arial Narrow", sans-serif; font-size
 }
 
 @media (max-width: 560px) {
-  .topbar { height: 56px; padding: 0 16px; }
-  .top-meta { gap: 6px; font-size: 8px; letter-spacing: .8px; }
-  .wordmark { gap: 8px; font-size: 9px; letter-spacing: 1px; }
-  .mark { width: 25px; height: 25px; }
   .layout { width: calc(100% - 32px); padding-top: 32px; }
   .summary { padding: 18px 17px 14px; }
   .souls-value { font-size: 46px; }
