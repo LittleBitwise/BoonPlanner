@@ -155,6 +155,7 @@ function render() {
 
     button.disabled = !availableToUnlock && !availableToUpgrade;
     button.classList.toggle("is-available", availableToUnlock || availableToUpgrade);
+    action.classList.toggle("is-insufficient-ap", ability.unlocked && Boolean(nextCost) && !availableToUpgrade);
     if (ability.unlocked) {
       status.textContent = `TIER ${ability.tier} / 3`;
       action.textContent = nextCost ? (availableToUpgrade ? `UPGRADE · ${nextCost} AP` : `NEED ${nextCost} AP`) : "";

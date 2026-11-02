@@ -64,7 +64,7 @@ h2 { margin: 5px 0 0; font-family: Impact, "Arial Narrow", sans-serif; font-size
 .gain-level-button:disabled span { color: #829087; }
 .ability-status { color: #aab4ad; font-size: 8px; font-weight: 800; letter-spacing: .6px; text-align: right; }
 .ability-action { color: var(--acid); font-size: 8px; font-weight: 900; letter-spacing: .6px; text-align: right; }
-.ability-track.is-ultimate .ability-action { color: var(--coral); }
+.ability-action.is-insufficient-ap { color: var(--coral); }
 .build-section { margin-top: 37px; }
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding-bottom: 12px; }
 .section-heading h2 { margin-top: 5px; }
