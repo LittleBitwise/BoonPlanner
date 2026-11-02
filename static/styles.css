@@ -87,7 +87,7 @@ h2 { margin: 5px 0 0; font-family: Impact, "Arial Narrow", sans-serif; font-size
 .section-heading h2 { margin-top: 5px; }
 .build-order { display: grid; gap: 0; margin: 0; }
 .build-order[hidden] { display: none; }
-.ability-track { display: grid; width: 100%; min-width: 0; min-height: 64px; grid-template-columns: 104px minmax(0, 1fr) 116px; align-items: center; gap: 12px; padding: 0 8px; border: 0; border-bottom: 1px solid var(--line); background: transparent; color: var(--paper); text-align: left; cursor: pointer; transition: background 120ms ease; }
+.ability-track { display: grid; width: 100%; min-width: 0; min-height: 64px; grid-template-columns: 104px minmax(0, 1fr) 116px; align-items: center; gap: 12px; padding: 0 8px; border: none; border-bottom: none; background: transparent; color: var(--paper); text-align: left; cursor: pointer; transition: background 120ms ease; }
 .ability-track:hover:not(:disabled) { background: rgba(54, 68, 58, .48); }
 .ability-track:focus-visible { position: relative; z-index: 1; outline: 2px solid var(--mint); outline-offset: -2px; }
 .ability-track:disabled { cursor: not-allowed; }
