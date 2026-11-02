@@ -43,27 +43,24 @@
         </div>
       </div>
       <p class="choice-prompt" id="choicePrompt">Gain this level to bank 1 ability point. Upgrades are optional and spend points separately.</p>
-      <button type="button" class="gain-level-button" id="gainLevelButton">GAIN LEVEL <span>BANK +1 ABILITY POINT</span></button>
-
-      <div class="ability-grid" id="abilityGrid" role="group" aria-label="Choose an ability to unlock or upgrade">
-        <button type="button" class="ability-card" data-ability="ability-1">
-          <span class="ability-index">01</span><strong>ABILITY 1</strong><span class="ability-status">LOCKED</span><span class="ability-next"></span><span class="ability-action">UNLOCK</span>
-        </button>
-        <button type="button" class="ability-card" data-ability="ability-2">
-          <span class="ability-index">02</span><strong>ABILITY 2</strong><span class="ability-status">LOCKED</span><span class="ability-next"></span><span class="ability-action">UNLOCK</span>
-        </button>
-        <button type="button" class="ability-card" data-ability="ability-3">
-          <span class="ability-index">03</span><strong>ABILITY 3</strong><span class="ability-status">LOCKED</span><span class="ability-next"></span><span class="ability-action">UNLOCK</span>
-        </button>
-        <button type="button" class="ability-card is-ultimate" data-ability="ultimate">
-          <span class="ability-index">04</span><strong>ULTIMATE</strong><span class="ability-status">LOCKED</span><span class="ability-next"></span><span class="ability-action">UNLOCK</span>
-        </button>
-      </div>
 
       <section class="build-section" aria-labelledby="buildTitle">
         <div class="section-heading"><div><h2 id="buildTitle">BUILD ORDER</h2></div><span class="order-count" id="orderCount">0 PICKS</span></div>
-        <p class="empty-order" id="emptyOrder">Ability unlocks and upgrades will appear here in pick order.</p>
-        <div class="build-order" id="buildOrder" role="list" aria-label="Ability assignment order" aria-live="polite"></div>
+        <button type="button" class="gain-level-button" id="gainLevelButton">GAIN LEVEL <span>BANK +1 ABILITY POINT</span></button>
+        <div class="build-order" id="buildOrder" role="group" aria-label="Choose abilities and view assignment order" aria-live="polite">
+          <button type="button" class="ability-track" data-ability="ability-1">
+            <strong class="track-name">ABILITY 1</strong><span class="track-line" aria-hidden="true"></span><span class="track-choice"><span class="ability-status">LOCKED</span><span class="ability-action">UNLOCK</span></span>
+          </button>
+          <button type="button" class="ability-track" data-ability="ability-2">
+            <strong class="track-name">ABILITY 2</strong><span class="track-line" aria-hidden="true"></span><span class="track-choice"><span class="ability-status">LOCKED</span><span class="ability-action">UNLOCK</span></span>
+          </button>
+          <button type="button" class="ability-track" data-ability="ability-3">
+            <strong class="track-name">ABILITY 3</strong><span class="track-line" aria-hidden="true"></span><span class="track-choice"><span class="ability-status">LOCKED</span><span class="ability-action">UNLOCK</span></span>
+          </button>
+          <button type="button" class="ability-track is-ultimate" data-ability="ultimate">
+            <strong class="track-name">ULTIMATE</strong><span class="track-line" aria-hidden="true"></span><span class="track-choice"><span class="ability-status">LOCKED</span><span class="ability-action">UNLOCK</span></span>
+          </button>
+        </div>
       </section>
 
       <details class="thresholds">

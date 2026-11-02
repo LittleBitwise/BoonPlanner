@@ -1,6 +1,6 @@
 const levels = JSON.parse(document.querySelector("#boon-levels").textContent);
 const abilityTierCosts = JSON.parse(document.querySelector("#ability-tier-costs").textContent);
-const abilityCards = [...document.querySelectorAll(".ability-card")];
+const abilityTracks = [...document.querySelectorAll(".ability-track")];
 const milestoneCards = [...document.querySelectorAll(".level-card")];
 const soulsValue = document.querySelector("#soulsValue");
 const levelValue = document.querySelector("#levelValue");
@@ -15,12 +15,11 @@ const choicePrompt = document.querySelector("#choicePrompt");
 const gainLevelButton = document.querySelector("#gainLevelButton");
 const buildOrder = document.querySelector("#buildOrder");
 const orderCount = document.querySelector("#orderCount");
-const emptyOrder = document.querySelector("#emptyOrder");
 const undoButton = document.querySelector("#undoButton");
-const abilities = new Map(abilityCards.map((card) => [card.dataset.ability, {
-  card,
-  name: card.querySelector("strong").textContent,
-  ultimate: card.dataset.ability === "ultimate",
+const abilities = new Map(abilityTracks.map((track) => [track.dataset.ability, {
+  track,
+  name: track.querySelector(".track-name").textContent,
+  ultimate: track.dataset.ability === "ultimate",
   unlocked: false,
   tier: 0,
 }]));
@@ -118,21 +117,27 @@ function promptFor(target) {
 
 function renderOrder() {
   orderCount.textContent = `${order.length} ${order.length === 1 ? "PICK" : "PICKS"}`;
-  emptyOrder.hidden = order.length > 0;
-  buildOrder.hidden = order.length === 0;
-  buildOrder.replaceChildren(...[...abilities.entries()].map(([abilityId, ability]) => {
-    const track = document.createElement("div");
-    track.className = "ability-track";
-    track.setAttribute("role", "listitem");
-    const points = order.map((entry, index) => {
-      if (entry.abilityId !== abilityId) return '<span class="order-slot" aria-hidden="true"></span>';
-      const description = entry.cost ? `upgrade costing ${entry.cost} AP` : "unlock";
-      const costLabel = entry.cost ? `<small>${entry.cost}AP</small>` : "";
-      return `<span class="order-point" role="listitem" aria-label="Pick ${index + 1}: ${entry.ability}, ${description}" title="Pick ${index + 1}: ${description}"><span>${String(index + 1).padStart(2, "0")}</span>${costLabel}</span>`;
-    });
-    track.innerHTML = `<strong class="track-name">${ability.name}</strong><div class="track-line" role="list" aria-label="${ability.name} picks">${points.join("")}</div>`;
-    return track;
-  }));
+  abilities.forEach((ability, abilityId) => {
+    const line = ability.track.querySelector(".track-line");
+    line.replaceChildren(...order.map((entry, index) => {
+      if (entry.abilityId !== abilityId) {
+        const slot = document.createElement("span");
+        slot.className = "order-slot";
+        return slot;
+      }
+      const point = document.createElement("span");
+      point.className = "order-point";
+      point.title = `Pick ${index + 1}: ${entry.cost ? `upgrade costing ${entry.cost} AP` : "unlock"}`;
+      point.innerHTML = `<span>${String(index + 1).padStart(2, "0")}</span>${entry.cost ? `<small>${entry.cost}AP</small>` : ""}`;
+      return point;
+    }));
+    const status = ability.track.querySelector(".ability-status").textContent;
+    const action = ability.track.querySelector(".ability-action").textContent;
+    const picks = order.flatMap((entry, index) => entry.abilityId === abilityId
+      ? [`PICK ${index + 1} ${entry.cost ? `UPGRADE, ${entry.cost} AP` : "UNLOCK"}`]
+      : []);
+    ability.track.setAttribute("aria-label", `${ability.name}: ${status}${action ? `, ${action}` : ""}${picks.length ? `. ${picks.join("; ")}` : ""}`);
+  });
 }
 
 function render() {
@@ -159,9 +164,8 @@ function render() {
   document.title = `${currentLevel < 0 ? "Ready" : `Level ${currentLevel}`} · ${formatSouls(souls)} souls | Boon Picker`;
 
   abilities.forEach((ability) => {
-    const button = ability.card;
+    const button = ability.track;
     const status = button.querySelector(".ability-status");
-    const next = button.querySelector(".ability-next");
     const action = button.querySelector(".ability-action");
     const availableToUnlock = canUnlock(ability);
     const availableToUpgrade = canUpgrade(ability);
@@ -171,12 +175,10 @@ function render() {
     button.classList.toggle("is-available", availableToUnlock || availableToUpgrade);
     if (ability.unlocked) {
       status.textContent = `TIER ${ability.tier} / 3`;
-      next.textContent = nextCost ? `COST ${nextCost} AP · ${unspentAbilityPoints} BANKED` : "MAX TIER";
       action.textContent = nextCost ? (availableToUpgrade ? `UPGRADE · ${nextCost} AP` : `NEED ${nextCost} AP`) : "";
     } else {
       const nextBasicUnlock = levels.find((item) => item.level > currentLevel && item.reward === "Ability unlock" && item.level !== 7);
       status.textContent = availableToUnlock ? "READY TO UNLOCK" : ability.ultimate ? currentLevel < 7 ? "UNLOCK AT LEVEL 7" : "NO ULT TOKEN BANKED" : pendingBasicUnlocks ? "READY TO UNLOCK" : nextBasicUnlock ? currentLevel < 0 && nextBasicUnlock.level === 0 ? "GAIN LEVEL TO EARN" : `TOKEN AT LEVEL ${nextBasicUnlock.level}` : "NO TOKEN BANKED";
-      next.textContent = "";
       action.textContent = availableToUnlock ? "UNLOCK" : "";
     }
   });
@@ -196,13 +198,13 @@ function commitAction(action) {
   render();
 }
 
-abilityCards.forEach((card) => {
-  card.addEventListener("click", () => {
-    const ability = abilities.get(card.dataset.ability);
+abilityTracks.forEach((track) => {
+  track.addEventListener("click", () => {
+    const ability = abilities.get(track.dataset.ability);
     if (canUnlock(ability)) {
-      commitAction({ type: "unlock", abilityId: card.dataset.ability });
+      commitAction({ type: "unlock", abilityId: track.dataset.ability });
     } else if (canUpgrade(ability)) {
-      commitAction({ type: "upgrade", abilityId: card.dataset.ability });
+      commitAction({ type: "upgrade", abilityId: track.dataset.ability });
     }
   });
 });
