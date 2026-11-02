@@ -112,14 +112,14 @@ function renderOrder() {
       }
       const point = document.createElement("span");
       point.className = "order-point";
-      point.title = `Pick ${index + 1}: ${entry.cost ? `upgrade costing ${entry.cost} AP` : "unlock"}`;
-      point.innerHTML = `<span>${String(index + 1).padStart(2, "0")}</span>${entry.cost ? `<small>${entry.cost}AP</small>` : ""}`;
+      point.title = `Pick ${String(index).padStart(2, "0")}: ${entry.cost ? `upgrade costing ${entry.cost} AP` : "unlock"}`;
+      point.innerHTML = `<span>${String(index).padStart(2, "0")}</span>${entry.cost ? `<small>${entry.cost}AP</small>` : ""}`;
       return point;
     }));
     const status = ability.track.querySelector(".ability-status").textContent;
     const action = ability.track.querySelector(".ability-action").textContent;
     const picks = order.flatMap((entry, index) => entry.abilityId === abilityId
-      ? [`PICK ${index + 1} ${entry.cost ? `UPGRADE, ${entry.cost} AP` : "UNLOCK"}`]
+      ? [`PICK ${String(index).padStart(2, "0")} ${entry.cost ? `UPGRADE, ${entry.cost} AP` : "UNLOCK"}`]
       : []);
     ability.track.setAttribute("aria-label", `${ability.name}: ${status}${action ? `, ${action}` : ""}${picks.length ? `. ${picks.join("; ")}` : ""}`);
   });
