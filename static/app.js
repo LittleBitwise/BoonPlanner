@@ -1,5 +1,4 @@
-const levels = JSON.parse(document.querySelector("#boon-levels").textContent);
-const abilityTierCosts = JSON.parse(document.querySelector("#ability-tier-costs").textContent);
+const { levels, abilityTierCosts } = window.BoonPickerProgression;
 const abilityTracks = [...document.querySelectorAll(".ability-track")];
 const soulsValue = document.querySelector("#soulsValue");
 const levelValue = document.querySelector("#levelValue");

@@ -1,6 +1,6 @@
 # Boon Picker
 
-A local Flask companion for planning Deadlock ability progression. Choose which ability to unlock or upgrade at each reward; every choice advances the boon progression and updates the total soul count. The ordered choices remain visible in the build log.
+A static browser companion for planning Deadlock ability progression. Choose which ability to unlock or upgrade at each reward; every choice advances the boon progression and updates the total soul count. The ordered choices remain visible in the build log.
 
 ![Boon Picker screenshot](preview.png)
 
@@ -8,19 +8,18 @@ Every level can be gained without upgrading an ability. Levels 0, 2, and 4 bank 
 
 ## Run locally
 
-```powershell
-py -m venv .venv
-.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-python -m flask --app app run --debug
-```
-
-Open <http://127.0.0.1:5000> in your browser.
+Open `index.html` in a browser. The app has no runtime dependencies or server requirement.
 
 ## Verify
 
-```powershell
-python -m unittest
+Node.js 18 or newer is required for the tests:
+
+```sh
+npm test
 ```
+
+## Host on GitHub Pages
+
+The included GitHub Actions workflow tests the project and deploys the static page when changes are pushed to `main`. In the repository settings, set **Pages > Build and deployment > Source** to **GitHub Actions**. The workflow publishes only the page and its browser assets.
 
 Progression thresholds are transcribed from the [Deadlock Wiki Boon page](https://deadlock.wiki/Boon). This is an unofficial fan-made companion and is not affiliated with Valve.

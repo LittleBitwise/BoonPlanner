@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101513">
   <title>Boon Picker | Deadlock</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+  <link rel="stylesheet" href="static/styles.css">
+  <script src="static/progression.js" defer></script>
+  <script src="static/app.js" defer></script>
 </head>
 <body>
   <main class="layout">
@@ -58,7 +59,5 @@
       </footer>
     </section>
   </main>
-  <script id="boon-levels" type="application/json">{{ levels|tojson }}</script>
-  <script id="ability-tier-costs" type="application/json">{{ ability_tier_costs|tojson }}</script>
 </body>
 </html>
