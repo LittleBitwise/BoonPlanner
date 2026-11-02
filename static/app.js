@@ -1,7 +1,6 @@
 const levels = JSON.parse(document.querySelector("#boon-levels").textContent);
 const abilityTierCosts = JSON.parse(document.querySelector("#ability-tier-costs").textContent);
 const abilityTracks = [...document.querySelectorAll(".ability-track")];
-const milestoneCards = [...document.querySelectorAll(".level-card")];
 const soulsValue = document.querySelector("#soulsValue");
 const levelValue = document.querySelector("#levelValue");
 const rewardValue = document.querySelector("#rewardValue");
@@ -166,12 +165,6 @@ function render() {
     }
   });
 
-  milestoneCards.forEach((card) => {
-    const level = Number(card.dataset.level);
-    card.classList.toggle("is-complete", level < currentLevel);
-    card.classList.toggle("is-current", level === currentLevel);
-    card.classList.toggle("is-next", level === (target?.level ?? -1));
-  });
   renderOrder();
 }
 

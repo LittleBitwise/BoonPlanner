@@ -55,19 +55,6 @@
         </div>
       </section>
 
-      <details class="thresholds">
-        <summary><span>SOUL THRESHOLDS</span><span>LEVELS 0–35</span></summary>
-        <div class="level-grid" id="levelGrid" aria-label="Boon soul thresholds">
-        {% for item in levels %}
-        <div class="level-card" data-level="{{ item.level }}" data-souls="{{ item.souls }}">
-          <span class="card-level">{{ '%02d'|format(item.level) }}</span>
-          <span class="card-souls">{{ '{:,}'.format(item.souls) }}</span>
-          {% if item.reward == 'Ability unlock' %}<span class="card-note unlock-note">UNLOCK</span>{% else %}<span class="card-note">+{{ '{:,}'.format(item.cost) }}</span>{% endif %}
-        </div>
-        {% endfor %}
-        </div>
-      </details>
-
       <footer class="source-line">
         <span>PROGRESSION DATA</span>
         <a href="https://deadlock.wiki/Boon" target="_blank" rel="noreferrer">DEADLOCK WIKI: BOON <span aria-hidden="true">↗</span></a>
