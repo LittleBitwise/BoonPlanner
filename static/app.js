@@ -1,8 +1,5 @@
 const levels = JSON.parse(document.querySelector("#boon-levels").textContent);
 const abilityTierCosts = JSON.parse(document.querySelector("#ability-tier-costs").textContent);
-const basicUnlockLevels = levels.filter((level) => level.reward === "Ability unlock" && level.level !== 7);
-const ultimateUnlockLevel = levels.find((level) => level.reward === "Ability unlock" && level.level === 7);
-const abilityPointLevels = levels.filter((level) => level.reward === "Ability point");
 const abilityTracks = [...document.querySelectorAll(".ability-track")];
 const soulsValue = document.querySelector("#soulsValue");
 const levelValue = document.querySelector("#levelValue");
@@ -105,18 +102,30 @@ function rebuildProgress() {
 }
 
 function renderOrder() {
-  let basicUnlockCount = 0;
-  let abilityPointsSpent = 0;
+  let levelIndex = -1;
+  let basicUnlocks = 0;
+  let ultimateUnlocks = 0;
+  let abilityPoints = 0;
+
+  function advanceLevel() {
+    levelIndex += 1;
+    const level = levels[levelIndex];
+    if (level.reward === "Ability unlock" && level.level === 7) ultimateUnlocks += 1;
+    else if (level.reward === "Ability unlock") basicUnlocks += 1;
+    else abilityPoints += 1;
+  }
+
   const pickThresholds = order.map((entry) => {
     if (entry.cost === undefined) {
-      if (entry.abilityId === "ultimate") return ultimateUnlockLevel.souls;
-      return basicUnlockLevels[basicUnlockCount++].souls;
+      const isUltimate = entry.abilityId === "ultimate";
+      while (levelIndex < 0 || (isUltimate ? ultimateUnlocks === 0 : basicUnlocks === 0)) advanceLevel();
+      if (isUltimate) ultimateUnlocks -= 1;
+      else basicUnlocks -= 1;
+    } else {
+      while (levelIndex < 0 || abilityPoints < entry.cost) advanceLevel();
+      abilityPoints -= entry.cost;
     }
-
-    abilityPointsSpent += entry.cost;
-    let earnedAbilityPoints = 0;
-    const threshold = abilityPointLevels.find((level) => ++earnedAbilityPoints >= abilityPointsSpent);
-    return threshold.souls;
+    return levels[levelIndex].souls;
   });
 
   abilities.forEach((ability, abilityId) => {
