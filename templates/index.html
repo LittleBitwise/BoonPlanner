@@ -35,17 +35,14 @@
         </div>
       </div>
 
-      <div class="picker-heading">
-        <div><span class="label">NEXT REWARD</span><h2 id="choiceHeading">LEVEL 1 · ABILITY POINT</h2></div>
-        <div class="stepper" aria-label="Manage ability order">
-          <button type="button" class="reset-button" id="undoButton" title="Undo the last ability choice" disabled>UNDO</button>
-          <button type="button" class="reset-button" id="resetButton" title="Clear the ability order">RESET</button>
-        </div>
-      </div>
-      <p class="choice-prompt" id="choicePrompt">Gain this level to bank 1 ability point. Upgrades are optional and spend points separately.</p>
-
       <section class="build-section" aria-labelledby="buildTitle">
-        <div class="section-heading"><div><h2 id="buildTitle">BUILD ORDER</h2></div><span class="order-count" id="orderCount">0 PICKS</span></div>
+        <div class="section-heading">
+          <div><h2 id="buildTitle">BUILD ORDER</h2></div>
+          <div class="stepper" aria-label="Manage ability order">
+            <button type="button" class="reset-button" id="undoButton" title="Undo the last ability choice" disabled>UNDO</button>
+            <button type="button" class="reset-button" id="resetButton" title="Clear the ability order">RESET</button>
+          </div>
+        </div>
         <button type="button" class="gain-level-button" id="gainLevelButton">GAIN LEVEL <span>BANK +1 ABILITY POINT</span></button>
         <div class="build-order" id="buildOrder" role="group" aria-label="Choose abilities and view assignment order" aria-live="polite">
           <button type="button" class="ability-track" data-ability="ability-1">

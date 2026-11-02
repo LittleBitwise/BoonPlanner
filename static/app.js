@@ -10,11 +10,8 @@ const unspentValue = document.querySelector("#unspentValue");
 const unspentUnlocks = document.querySelector("#unspentUnlocks");
 const progressFill = document.querySelector("#progressFill");
 const progressTrack = document.querySelector(".progress-track");
-const choiceHeading = document.querySelector("#choiceHeading");
-const choicePrompt = document.querySelector("#choicePrompt");
 const gainLevelButton = document.querySelector("#gainLevelButton");
 const buildOrder = document.querySelector("#buildOrder");
-const orderCount = document.querySelector("#orderCount");
 const undoButton = document.querySelector("#undoButton");
 const abilities = new Map(abilityTracks.map((track) => [track.dataset.ability, {
   track,
@@ -105,18 +102,7 @@ function rebuildProgress() {
   actions.forEach((action) => applyAction(action));
 }
 
-function promptFor(target) {
-  if (!target) return { heading: "MAXIMUM LEVEL", prompt: "All 35 boon levels are assigned." };
-  if (target.reward === "Ability unlock") {
-    if (target.level === 7) return { heading: `LEVEL ${target.level} · ULTIMATE UNLOCK`, prompt: "Gain this level to bank an Ultimate unlock, then assign it whenever you're ready." };
-    const heading = target.level === 0 ? "STARTING ABILITY" : `LEVEL ${target.level} · ABILITY UNLOCK`;
-    return { heading, prompt: "Gain this level to bank a basic ability unlock. You can assign it later." };
-  }
-  return { heading: `LEVEL ${target.level} · ABILITY POINT`, prompt: "Gain this level to bank 1 ability point. Upgrades are optional and spend points separately." };
-}
-
 function renderOrder() {
-  orderCount.textContent = `${order.length} ${order.length === 1 ? "PICK" : "PICKS"}`;
   abilities.forEach((ability, abilityId) => {
     const line = ability.track.querySelector(".track-line");
     line.replaceChildren(...order.map((entry, index) => {
@@ -143,7 +129,6 @@ function renderOrder() {
 function render() {
   const target = targetLevel();
   const current = levels[Math.max(0, currentLevel)];
-  const prompt = promptFor(target);
   const souls = current.souls;
   const canAdvance = canGainLevel(target);
 
@@ -155,8 +140,6 @@ function render() {
   unspentUnlocks.textContent = `${pendingBasicUnlocks} BASIC · ${pendingUltimateUnlocks} ULT`;
   progressFill.style.width = `${(Math.max(currentLevel, 0) / 35) * 100}%`;
   progressTrack.setAttribute("aria-valuenow", String(Math.max(currentLevel, 0)));
-  choiceHeading.textContent = prompt.heading;
-  choicePrompt.textContent = prompt.prompt;
   gainLevelButton.disabled = !canAdvance;
   gainLevelButton.childNodes[0].textContent = canAdvance ? "GAIN LEVEL " : "MAX LEVEL ";
   gainLevelButton.querySelector("span").textContent = !target ? "ALL BOON LEVELS CLAIMED" : target.reward === "Ability unlock" ? target.level === 7 ? "BANK +1 ULTIMATE UNLOCK" : "BANK +1 BASIC UNLOCK" : "BANK +1 ABILITY POINT";
